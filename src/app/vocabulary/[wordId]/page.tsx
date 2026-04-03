@@ -6,11 +6,12 @@ import { intermediateWords } from "@/data/vocabulary/intermediate";
 import { advancedWords } from "@/data/vocabulary/advanced";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 import { useLanguage } from "@/hooks/useLanguage";
 import { LanguageToggle } from "@/components/conversation/LanguageToggle";
 import { useState } from "react";
 import type { Language } from "@/types";
-import { Volume2, ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -76,9 +77,12 @@ export default function WordDetailPage() {
             >
               <Star size={20} fill={favorited ? "white" : "none"} />
             </button>
-            <button className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
-              <Volume2 size={20} />
-            </button>
+            <SpeakButton
+              text={word.word}
+              language="en"
+              size="lg"
+              className="bg-white/20 hover:bg-white/30 text-white hover:text-white dark:hover:text-white"
+            />
           </div>
         </div>
       </div>
@@ -116,9 +120,18 @@ export default function WordDetailPage() {
         </p>
         {/* All 3 languages */}
         <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
-          <p className="text-xs text-gray-500">🇬🇧 {word.exampleSentence}</p>
-          <p className="text-xs text-gray-500 font-bengali">🇧🇩 {word.exampleSentenceBN}</p>
-          <p className="text-xs text-gray-500 font-arabic" dir="rtl">🇸🇦 {word.exampleSentenceAR}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-500 flex-1">🇬🇧 {word.exampleSentence}</p>
+            <SpeakButton text={word.exampleSentence} language="en" size="sm" />
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-500 font-bengali flex-1">🇧🇩 {word.exampleSentenceBN}</p>
+            <SpeakButton text={word.exampleSentenceBN} language="bn" size="sm" />
+          </div>
+          <div className="flex items-center gap-2" dir="rtl">
+            <p className="text-xs text-gray-500 font-arabic flex-1">🇸🇦 {word.exampleSentenceAR}</p>
+            <SpeakButton text={word.exampleSentenceAR} language="ar" size="sm" />
+          </div>
         </div>
       </div>
 

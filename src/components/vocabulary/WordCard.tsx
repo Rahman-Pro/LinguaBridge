@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { VocabularyWord } from "@/types";
 import { Badge } from "@/components/ui/Badge";
-import { Volume2 } from "lucide-react";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +41,7 @@ export function WordCard({ word, compact = false }: WordCardProps) {
             <Badge variant="default" size="sm">
               {word.partOfSpeech}
             </Badge>
-          </div>
+            <SpeakButton text={word.word} language="en" size="sm" /></div>
         </div>
 
         {/* Meaning */}

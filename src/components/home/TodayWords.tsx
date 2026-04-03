@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 import { beginnerWords } from "@/data/vocabulary/beginner";
 import { useLanguage } from "@/hooks/useLanguage";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -39,11 +40,14 @@ export function TodayWords() {
         <div className="bg-gradient-to-br from-secondary-50 to-primary-50 dark:from-gray-700 dark:to-gray-800 rounded-xl p-4 mb-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <Link href={`/vocabulary/${word.id}`}>
-                <h4 className="text-2xl font-black text-gray-900 dark:text-white hover:text-primary-600 transition-colors">
-                  {word.word}
-                </h4>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href={`/vocabulary/${word.id}`}>
+                  <h4 className="text-2xl font-black text-gray-900 dark:text-white hover:text-primary-600 transition-colors">
+                    {word.word}
+                  </h4>
+                </Link>
+                <SpeakButton text={word.word} language="en" size="md" />
+              </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {word.pronunciation}
               </p>

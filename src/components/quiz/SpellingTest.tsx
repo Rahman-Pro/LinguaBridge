@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { SpellingQuestion } from "@/types";
 import { cn } from "@/lib/utils";
 import { Volume2, CheckCircle2, XCircle } from "lucide-react";
+import { useSpeech } from "@/hooks/useSpeech";
 
 interface SpellingTestProps {
   question: SpellingQuestion;
@@ -15,6 +16,7 @@ export function SpellingTestComponent({ question, onAnswer }: SpellingTestProps)
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showWord, setShowWord] = useState(false);
+  const { speak, isSpeaking } = useSpeech();
 
   const handleSubmit = () => {
     if (!answer.trim()) return;
@@ -31,9 +33,15 @@ export function SpellingTestComponent({ question, onAnswer }: SpellingTestProps)
         <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
           🎧 Listen to the word and type the correct spelling
         </p>
-        <button className="flex items-center gap-2 px-6 py-3 bg-secondary-500 hover:bg-secondary-600 text-white rounded-xl font-medium transition-colors">
+        <button
+          onClick={() => speak(question.word, "en")}
+          className={cn(
+            "flex items-center gap-2 px-6 py-3 bg-secondary-500 hover:bg-secondary-600 text-white rounded-xl font-medium transition-colors",
+            isSpeaking && "animate-pulse"
+          )}
+        >
           <Volume2 size={20} />
-          Play Word
+          {isSpeaking ? "Speaking…" : "Play Word"}
         </button>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Hint: {question.hint}

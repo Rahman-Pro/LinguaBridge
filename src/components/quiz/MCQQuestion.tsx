@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { MCQQuestion } from "@/types";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 
 interface MCQQuestionProps {
   question: MCQQuestion;
@@ -24,9 +25,12 @@ export function MCQQuestionComponent({ question, onAnswer }: MCQQuestionProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-lg font-semibold text-gray-900 dark:text-white">
-        {question.question}
-      </p>
+      <div className="flex items-start gap-2">
+        <p className="text-lg font-semibold text-gray-900 dark:text-white flex-1">
+          {question.question}
+        </p>
+        <SpeakButton text={question.question} language="en" size="md" />
+      </div>
 
       <div className="grid grid-cols-1 gap-2">
         {question.options.map((option) => {
