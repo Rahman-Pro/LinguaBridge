@@ -10,9 +10,10 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { LanguageToggle } from "@/components/conversation/LanguageToggle";
 import { useState } from "react";
 import type { Language } from "@/types";
-import { Volume2, ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 
 const allWords = [...beginnerWords, ...intermediateWords, ...advancedWords];
 
@@ -76,9 +77,12 @@ export default function WordDetailPage() {
             >
               <Star size={20} fill={favorited ? "white" : "none"} />
             </button>
-            <button className="p-2 bg-white/20 rounded-xl hover:bg-white/30 transition-colors">
-              <Volume2 size={20} />
-            </button>
+            <SpeakButton
+              text={word.word}
+              lang="en"
+              size="lg"
+              className="p-2 bg-white/20 rounded-xl hover:bg-white/30 text-white hover:text-white"
+            />
           </div>
         </div>
       </div>
@@ -90,9 +94,12 @@ export default function WordDetailPage() {
 
       {/* Meaning Card */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 mb-4">
-        <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-2">
-          Meaning
-        </h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">
+            Meaning
+          </h2>
+          <SpeakButton text={meaning} lang={activeLang} size="sm" />
+        </div>
         <p className={cn(
           "text-xl font-semibold text-gray-900 dark:text-white",
           activeLang === "ar" && "font-arabic text-right",
@@ -104,9 +111,12 @@ export default function WordDetailPage() {
 
       {/* Example Sentence */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 mb-4">
-        <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-2">
-          Example Sentence
-        </h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase">
+            Example Sentence
+          </h2>
+          <SpeakButton text={example} lang={activeLang} size="sm" />
+        </div>
         <p className={cn(
           "text-gray-700 dark:text-gray-300 italic leading-relaxed",
           activeLang === "ar" && "font-arabic text-right",
@@ -116,9 +126,18 @@ export default function WordDetailPage() {
         </p>
         {/* All 3 languages */}
         <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
-          <p className="text-xs text-gray-500">🇬🇧 {word.exampleSentence}</p>
-          <p className="text-xs text-gray-500 font-bengali">🇧🇩 {word.exampleSentenceBN}</p>
-          <p className="text-xs text-gray-500 font-arabic" dir="rtl">🇸🇦 {word.exampleSentenceAR}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-500 flex-1">🇬🇧 {word.exampleSentence}</p>
+            <SpeakButton text={word.exampleSentence} lang="en" size="sm" />
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-gray-500 font-bengali flex-1">🇧🇩 {word.exampleSentenceBN}</p>
+            <SpeakButton text={word.exampleSentenceBN} lang="bn" size="sm" />
+          </div>
+          <div className="flex items-center gap-2" dir="rtl">
+            <p className="text-xs text-gray-500 font-arabic flex-1">🇸🇦 {word.exampleSentenceAR}</p>
+            <SpeakButton text={word.exampleSentenceAR} lang="ar" size="sm" />
+          </div>
         </div>
       </div>
 

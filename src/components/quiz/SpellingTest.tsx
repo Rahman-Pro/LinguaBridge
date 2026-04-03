@@ -3,7 +3,8 @@
 import { useState } from "react";
 import type { SpellingQuestion } from "@/types";
 import { cn } from "@/lib/utils";
-import { Volume2, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 
 interface SpellingTestProps {
   question: SpellingQuestion;
@@ -31,10 +32,7 @@ export function SpellingTestComponent({ question, onAnswer }: SpellingTestProps)
         <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
           🎧 Listen to the word and type the correct spelling
         </p>
-        <button className="flex items-center gap-2 px-6 py-3 bg-secondary-500 hover:bg-secondary-600 text-white rounded-xl font-medium transition-colors">
-          <Volume2 size={20} />
-          Play Word
-        </button>
+        <SpeakButton variant="button" text={question.word} lang="en" label="Play Word" className="px-6 py-3 text-base" />
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Hint: {question.hint}
         </p>
