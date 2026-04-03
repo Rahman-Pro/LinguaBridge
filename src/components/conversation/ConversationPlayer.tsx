@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { Conversation } from "@/types";
 import type { Language } from "@/types";
 import { LanguageToggle } from "./LanguageToggle";
 import { cn } from "@/lib/utils";
 import { Volume2 } from "lucide-react";
+import { SpeakButton } from "@/components/ui/SpeakButton";
+import { LANG_MAP, SPEECH_DEFAULTS } from "@/lib/speech";
 
 interface ConversationPlayerProps {
   conversation: Conversation;
@@ -25,6 +27,41 @@ export function ConversationPlayer({ conversation }: ConversationPlayerProps) {
     }
   };
 
+  const handlePlayAll = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    const lang = activeLang as "en" | "bn" | "ar";
+    const langCode = LANG_MAP[lang] || "en-US";
+    let index = 0;
+
+    const getDialogueText = (dialogue: Conversation["dialogues"][0]) => {
+      switch (lang) {
+        case "bn": return dialogue.textBN;
+        case "ar": return dialogue.textAR;
+        default: return dialogue.textEN;
+      }
+    };
+
+    const speakNext = () => {
+      if (index >= conversation.dialogues.length) return;
+      const dialogue = conversation.dialogues[index];
+      const text = getDialogueText(dialogue);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = langCode;
+      utterance.rate = SPEECH_DEFAULTS.rate;
+      utterance.pitch = SPEECH_DEFAULTS.pitch;
+      utterance.volume = SPEECH_DEFAULTS.volume;
+      utterance.onend = () => {
+        index++;
+        speakNext();
+      };
+      window.speechSynthesis.speak(utterance);
+    };
+
+    speakNext();
+  }, [activeLang, conversation.dialogues]);
+
   const speakers = Array.from(new Set(conversation.dialogues.map((d) => d.speaker)));
 
   return (
@@ -33,7 +70,16 @@ export function ConversationPlayer({ conversation }: ConversationPlayerProps) {
         <h2 className="font-bold text-xl text-gray-900 dark:text-white">
           {conversation.title}
         </h2>
-        <LanguageToggle active={activeLang} onChange={setActiveLang} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handlePlayAll}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg text-xs font-medium transition-colors"
+          >
+            <Volume2 size={14} />
+            Play All
+          </button>
+          <LanguageToggle active={activeLang} onChange={setActiveLang} />
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -70,13 +116,19 @@ export function ConversationPlayer({ conversation }: ConversationPlayerProps) {
                 >
                   {getText(dialogue)}
                 </p>
-                <button className={cn(
-                  "mt-1.5 flex items-center gap-1 text-xs opacity-60 hover:opacity-100 transition-opacity",
-                  isFirst ? "text-gray-500" : "text-white"
-                )}>
-                  <Volume2 size={12} />
-                  <span>Play</span>
-                </button>
+                <SpeakButton
+                  text={getText(dialogue)}
+                  lang={activeLang as "en" | "bn" | "ar"}
+                  size="sm"
+                  variant="button"
+                  label="Play"
+                  className={cn(
+                    "mt-1.5 !px-2 !py-0.5 text-xs",
+                    isFirst
+                      ? "!bg-transparent !text-gray-500 hover:!bg-gray-200 dark:hover:!bg-gray-600"
+                      : "!bg-white/20 !text-white hover:!bg-white/30"
+                  )}
+                />
               </div>
             </div>
           );

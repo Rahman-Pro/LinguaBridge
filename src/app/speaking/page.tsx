@@ -1,6 +1,7 @@
 "use client";
 
-import { Mic, Volume2, Star } from "lucide-react";
+import { Mic, Volume2 } from "lucide-react";
+import { SpeakButton } from "@/components/ui/SpeakButton";
 
 export default function SpeakingPage() {
   return (
@@ -22,10 +23,10 @@ export default function SpeakingPage() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            { title: "Morning Dialogue", level: "Beginner", duration: "1:30", emoji: "🌅" },
-            { title: "Job Interview", level: "Intermediate", duration: "2:45", emoji: "💼" },
-            { title: "IELTS Monologue", level: "Advanced", duration: "3:20", emoji: "🎓" },
-            { title: "Tech Meeting", level: "Intermediate", duration: "4:10", emoji: "💻" },
+            { title: "Morning Dialogue", level: "Beginner", duration: "1:30", emoji: "🌅", text: "Good morning! How are you doing today? I hope you slept well." },
+            { title: "Job Interview", level: "Intermediate", duration: "2:45", emoji: "💼", text: "Tell me about yourself and your professional experience. What are your key strengths?" },
+            { title: "IELTS Monologue", level: "Advanced", duration: "3:20", emoji: "🎓", text: "In today's rapidly changing world, education plays a vital role in shaping individuals and societies." },
+            { title: "Tech Meeting", level: "Intermediate", duration: "4:10", emoji: "💻", text: "Let's discuss the project timeline and deliverables for this sprint. Can everyone share their updates?" },
           ].map((item) => (
             <div key={item.title} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
               <span className="text-3xl">{item.emoji}</span>
@@ -37,9 +38,12 @@ export default function SpeakingPage() {
                   <span className="text-xs text-gray-400">{item.duration}</span>
                 </div>
               </div>
-              <button className="p-2.5 bg-secondary-500 hover:bg-secondary-600 text-white rounded-xl transition-colors">
-                <Volume2 size={18} />
-              </button>
+              <SpeakButton
+                text={item.text}
+                lang="en"
+                size="md"
+                className="p-2.5 !rounded-xl bg-secondary-500 hover:bg-secondary-600 text-white hover:text-white"
+              />
             </div>
           ))}
         </div>
